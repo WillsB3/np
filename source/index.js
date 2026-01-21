@@ -58,6 +58,9 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 		options.cleanup = false;
 	}
 
+	// Add rootDirectory to options so it's available in tasks
+	options.rootDirectory = rootDirectory;
+
 	const runTests = options.tests && !options.yolo;
 	const runCleanup = options.cleanup && !options.yolo;
 	const lockfile = findLockfile(rootDirectory, packageManager);
@@ -194,7 +197,7 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 						}
 					},
 					/** @type {(context, task) => Listr.ListrTaskResult<any>} */
-					task(context, task) {
+					async task(context, task) {
 						let hasError = false;
 
 						const publishCommand = getPublishCommand(options);
@@ -202,10 +205,7 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 						console.log('🔍 [DEBUG] Working directory (cwd):', options.rootDirectory);
 						console.log('🔍 [DEBUG] Checking package.json in cwd...');
 						try {
-							const fs = require('fs');
-							const path = require('path');
-							const pkgPath = path.join(options.rootDirectory, 'package.json');
-							const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+							const pkg = await util.readPackage(options.rootDirectory);
 							console.log('🔍 [DEBUG] Package.json in publish directory:');
 							console.log('🔍 [DEBUG]   name:', pkg.name);
 							console.log('🔍 [DEBUG]   version:', pkg.version);
