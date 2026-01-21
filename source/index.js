@@ -197,7 +197,24 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 					task(context, task) {
 						let hasError = false;
 
-						return from(runPublish(getPublishCommand(options), {cwd: options.rootDirectory}))
+						const publishCommand = getPublishCommand(options);
+						console.log('🔍 [DEBUG] Publishing package with command:', printCommand(publishCommand));
+						console.log('🔍 [DEBUG] Working directory (cwd):', options.rootDirectory);
+						console.log('🔍 [DEBUG] Checking package.json in cwd...');
+						try {
+							const fs = require('fs');
+							const path = require('path');
+							const pkgPath = path.join(options.rootDirectory, 'package.json');
+							const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+							console.log('🔍 [DEBUG] Package.json in publish directory:');
+							console.log('🔍 [DEBUG]   name:', pkg.name);
+							console.log('🔍 [DEBUG]   version:', pkg.version);
+							console.log('🔍 [DEBUG]   private:', pkg.private);
+						} catch (error) {
+							console.log('🔍 [DEBUG] Could not read package.json:', error.message);
+						}
+
+						return from(runPublish(publishCommand, {cwd: options.rootDirectory}))
 							.pipe(catchError(error => handleNpmError(error, task, otp => {
 								context.otp = otp;
 

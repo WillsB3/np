@@ -117,7 +117,15 @@ async function getOptions() {
 	const initialConfig = await config(process.cwd());
 	const contents = cli.flags.contents ?? initialConfig?.contents;
 
+	console.log('🔍 [DEBUG] Reading package from:', contents || 'current directory');
+	console.log('🔍 [DEBUG] Current working directory:', process.cwd());
+
 	const {package_, rootDirectory} = await util.readPackage(contents);
+
+	console.log('🔍 [DEBUG] Package name:', package_.name);
+	console.log('🔍 [DEBUG] Package version:', package_.version);
+	console.log('🔍 [DEBUG] Package private field:', package_.private);
+	console.log('🔍 [DEBUG] Root directory:', rootDirectory);
 
 	const localConfig = await config(rootDirectory);
 
