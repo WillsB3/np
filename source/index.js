@@ -59,7 +59,8 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 	}
 
 	// Add rootDirectory to options so it's available in tasks
-	options.rootDirectory = rootDirectory;
+	// TEMPORARILY COMMENTED OUT TO TEST LOGGING
+	// options.rootDirectory = rootDirectory;
 
 	const runTests = options.tests && !options.yolo;
 	const runCleanup = options.cleanup && !options.yolo;
