@@ -41,5 +41,9 @@ export function runPublish(arguments_, options = {}) {
 		execaOptions.cwd = options.cwd;
 	}
 
+	console.log('🔍 [DEBUG] runPublish - Command:', arguments_);
+	console.log('🔍 [DEBUG] runPublish - cwd:', execaOptions.cwd || process.cwd());
+	console.log('🔍 [DEBUG] runPublish - Full execaOptions:', execaOptions);
+
 	return execa(...arguments_, execaOptions);
 }

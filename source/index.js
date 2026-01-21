@@ -210,6 +210,8 @@ const np = async (input = 'patch', {packageManager, ...options}, {package_, root
 							console.log('🔍 [DEBUG]   name:', pkg.name);
 							console.log('🔍 [DEBUG]   version:', pkg.version);
 							console.log('🔍 [DEBUG]   private:', pkg.private);
+							console.log('🔍 [DEBUG]   publishCommand:', publishCommand);
+							console.log('🔍 [DEBUG]   options:', options);
 						} catch (error) {
 							console.log('🔍 [DEBUG] Could not read package.json:', error.message);
 						}
